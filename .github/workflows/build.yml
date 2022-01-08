@@ -34,14 +34,6 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Preview Pull Request
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist
-          destination_dir: preview/${{ github.event.pull_request.number }}
-          cname: face-auth.onpy.in
       - name: Release
         if: ${{ github.event_name == 'push' }}
         uses: peaceiris/actions-gh-pages@v3
@@ -50,6 +42,14 @@ jobs:
           publish_dir: dist
           cname: face-auth.onpy.in
           keep_files: true
+      - name: Preview Pull Request
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          destination_dir: preview/${{ github.event.pull_request.number }}
+          cname: face-auth.onpy.in
       - name: Publish
         if: ${{ github.event_name == 'pull_request' }}
         uses: marocchino/sticky-pull-request-comment@v2
@@ -72,4 +72,5 @@ jobs:
           rm -rf preview/${{ github.event.pull_request.number }}
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          ref: gh-pages
           commit_message: Delete Preview ${{ github.event.pull_request.number }}
