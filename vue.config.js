@@ -7,9 +7,6 @@ if (REQUIRED_ENV_VARS.some(env => typeof process.env[env] === 'undefined')) {
 }
 
 module.exports = {
-    publicPath: '',
-    build: {
-      assetsPublicPath: '',
-      assetsSubDirectory: 'static',
-    }
+    publicPath: './',
+    assetsDir: 'static',
 };
