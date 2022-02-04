@@ -1,5 +1,5 @@
 {
-  "name": "face-authentication-login",
+  "name": "face-authentication-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {

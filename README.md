@@ -1,24 +1,26 @@
-# vue-login
+# face-authentication-client
 
-## Project setup
-```
-npm install
-```
+A Web Client for [face-authentication](https://github.com/PradyumnaKrishna/face-authentication), implemented using Vue.js and JavaScript that contains login and registration features.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Development
 
-### Lints and fixes files
-```
-npm run lint
-```
+1. Install Libraries
+   ```
+   npm install
+   ```
+2. Compiles and hot-reloads for development
+   ```
+   npm run serve
+   ```
+3. Compiles and minifies for production
+   ```
+   npm run build
+   ```
+4. Lints and fixes files
+   ```
+   npm run lint
+   ```
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
