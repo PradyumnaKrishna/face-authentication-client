@@ -1,7 +1,6 @@
 <template>
   <div class="v-camera">
     <video ref="camera" v-bind:style="cameraStyle" autoplay />
-    <canvas ref="capture" v-show="false" v-bind:style="cameraStyle" />
   </div>
 </template>
 
@@ -27,6 +26,11 @@ export default {
       };
     },
   },
+  data() {
+    return {
+      imageCapture: null,
+    }
+  },
   beforeUnmount() {
     let tracks = this.$refs.camera.srcObject.getTracks();
 
@@ -35,14 +39,20 @@ export default {
     });
   },
   async created() {
-    const constraints = (window.constraints = {
-      video: true,
+    const constraints = {
       audio: false,
-    });
+      video: true,
+    };
+
+    let stream = null;
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
       this.$refs.camera.srcObject = stream;
+      
+      const track = stream.getVideoTracks()[0];
+      this.imageCapture = new ImageCapture(track);
+
       await this.sleep(3000);
       await this.capture();
     } catch (error) {
@@ -52,12 +62,26 @@ export default {
   },
   methods: {
     async capture() {
-      const capture = this.$refs.capture;
-      const context = capture.getContext("2d");
-      context.drawImage(this.$refs.camera, 0, 0, capture.width, capture.height);
-      const src = capture.toDataURL("image/jpeg");
+      this.imageCapture.grabFrame()
+      .then(img => {
+        return new Promise(res => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
 
-      this.$emit("canvas-src", src);
+          let ctx = canvas.getContext('bitmaprenderer');
+          if (ctx) {
+            ctx.transferFromImageBitmap(img);
+          }
+          else {
+            canvas.getContext('2d').drawImage(img,0,0);
+          }
+
+          canvas.toBlob(res);
+        });
+      })
+      .then(blob => this.$emit("image", blob))
+      .catch(error => console.log(error));
     },
     sleep(ms) {
       return new Promise((resolve) => {

@@ -15,7 +15,7 @@
       </div>
 
       <div v-show="submitted" class="text-center">
-        <camera v-if="camera" ref="camera" @canvas-src="authenticate"/>
+        <camera v-if="camera" ref="camera" @image="authenticate"/>
         <clip-loader v-if="authenticating" :size="'30px'"/>
         <button v-else class="btn btn-dark btn-block" type="reset" @click="retry">Retry</button>
       </div>
@@ -30,7 +30,7 @@
 <script>
 import Camera from "../components/Camera";
 import ClipLoader from "../components/ClipLoader";
-import {API, dataURItoBlob, errorHandler} from "../helpers/utils";
+import {API, errorHandler} from "../helpers/utils";
 
 const apiBase = process.env.VUE_APP_APIURL;
 const api = new API(apiBase);
@@ -50,8 +50,7 @@ export default {
     }
   },
   methods: {
-    authenticate(src) {
-      const photo = dataURItoBlob(src);
+    authenticate(photo) {
       const formData = new FormData();
 
       formData.append("image", photo)
